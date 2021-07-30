@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script>
+      async function httpRequestBERTModel() {
+        data = document.getElementById("input-text-area").value
+        console.log(data)
+        const response = await fetch('http://ea9b7ad6-dc76-4675-9e69-af54984662f5.australiaeast.azurecontainer.io/score', {
+          method: 'POST',
+          body: {
+                  "data": "My hope lay in Jack's promise that he would keep a bright light burning in the upper story to guide me on my course."
+                }, // string or object
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        const out = await response.json(); //extract JSON from the http response
+        console.log(out)
+        document.getElementById("readability-score-input").value = document.getElementById("readability-score-input").value + " " + out
+      }
+    </script>
+    <style>
+      html, body{
+        height: 100%;
+      }
+      .fill { 
+        min-height: 100%;
+        height: 100%;
+      }
+    </style>      
+  </head>
+  <body>
+    <div class='container fill'>
+      <div class='row fill'>
+        <div class='col my-auto'>
+          <h1 class='text-center'>HowReadableIsThis?</h1>
+          
+        </div>
+  
+        <div class="col my-auto">
+          <form>
+            <div class="mb-3">
+              <textarea class="form-control" id="input-text-area" rows="5">This is a very readable sentence.</textarea>
+            </div>   
+          </form>
+
+          <input class="form-control float-start mb-3" id='readability-score-input' type="text" value="Readability Score:" readonly>
+          
+          <button type="submit" class="btn btn-primary float-end" onclick="httpRequestBERTModel()">Submit!</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
